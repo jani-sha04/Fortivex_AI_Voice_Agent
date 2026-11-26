@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FORTIVEX – Autonomous AI Sales Voice Agent | Project Report</title>
+<style>
+  :root {
+    --bg: #0d1117; --bg2: #161b22; --bg3: #21262d;
+    --border: #30363d;
+    --blue: #58a6ff; --green: #3fb950; --orange: #f97316;
+    --purple: #8b5cf6; --cyan: #06b6d4; --yellow: #f59e0b; --red: #ef4444;
+    --text: #e6edf3; --muted: #8b949e;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.65;
+  }
+
+  /* ── Cover page ──────────────────────────────────────────── */
+  .cover {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    padding: 3rem 2rem;
+    background: radial-gradient(ellipse at top, #0d2444 0%, #0d1117 60%);
+    border-bottom: 1px solid var(--border);
+  }
+  .cover-logo { font-size: 4rem; margin-bottom: 1rem; }
+  .cover h1 {
+    font-size: 2.8rem; font-weight: 800; letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--cyan) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+  }
+  .cover h2 { font-size: 1.3rem; color: var(--muted); font-weight: 400; margin-bottom: 2rem; }
+  .cover-meta { display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; }
+  .meta-pill {
+    background: var(--bg2); border: 1px solid var(--border);
+    padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.85rem; color: var(--muted);
+  }
+  .meta-pill span { color: var(--text); font-weight: 600; }
+
+  /* ── Layout ──────────────────────────────────────────────── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; }
+
+  /* ── TOC ─────────────────────────────────────────────────── */
+  .toc {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 2rem; margin-bottom: 3rem;
+  }
+  .toc h3 { color: var(--blue); margin-bottom: 1rem; font-size: 1.1rem; }
+  .toc ol { padding-left: 1.5rem; }
+  .toc li { margin: 0.3rem 0; }
+  .toc a { color: var(--muted); text-decoration: none; }
+  .toc a:hover { color: var(--blue); }
+
+  /* ── Section headers ─────────────────────────────────────── */
+  .section { margin-bottom: 4rem; }
+  .section-header {
+    display: flex; align-items: center; gap: 0.8rem;
+    border-bottom: 2px solid var(--border); padding-bottom: 0.8rem; margin-bottom: 1.8rem;
+  }
+  .section-num {
+    background: var(--blue); color: #000; font-weight: 800;
+    width: 2rem; height: 2rem; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0;
+  }
+  .section-header h2 { font-size: 1.5rem; color: var(--text); }
+  h3 { font-size: 1.1rem; color: var(--blue); margin: 1.5rem 0 0.8rem; }
+  p { color: var(--muted); margin-bottom: 0.9rem; }
+  strong { color: var(--text); }
+
+  /* ── Cards / grids ───────────────────────────────────────── */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1.2rem; transition: border-color .2s;
+  }
+  .card:hover { border-color: var(--blue); }
+  .card-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
+  .card h4 { font-size: 0.95rem; color: var(--text); margin-bottom: 0.4rem; }
+  .card p { font-size: 0.84rem; margin: 0; }
+
+  /* ── Feature pills ───────────────────────────────────────── */
+  .pill-group { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.2rem; }
+  .pill {
+    padding: 0.3rem 0.8rem; border-radius: 50px; font-size: 0.78rem; font-weight: 600;
+    border: 1px solid currentColor;
+  }
+  .pill-blue   { color: var(--blue);   background: rgba(88,166,255,.12); }
+  .pill-green  { color: var(--green);  background: rgba(63,185,80,.12); }
+  .pill-orange { color: var(--orange); background: rgba(249,115,22,.12); }
+  .pill-purple { color: var(--purple); background: rgba(139,92,246,.12); }
+  .pill-cyan   { color: var(--cyan);   background: rgba(6,182,212,.12); }
+  .pill-yellow { color: var(--yellow); background: rgba(245,158,11,.12); }
+
+  /* ── Tech stack table ────────────────────────────────────── */
+  .tech-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+  .tech-table th, .tech-table td { text-align: left; padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+  .tech-table th { color: var(--blue); font-size: 0.8rem; text-transform: uppercase; letter-spacing: .05em; background: var(--bg3); }
+  .tech-table tr:hover td { background: var(--bg3); }
+
+  /* ── Code block ──────────────────────────────────────────── */
+  pre {
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem 1.2rem; font-size: 0.82rem; overflow-x: auto;
+    color: var(--green); line-height: 1.5; margin-bottom: 1.2rem;
+  }
+  code { font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace; }
+
+  /* ── Status badges ───────────────────────────────────────── */
+  .status { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 600; }
+  .status-done   { color: var(--green); }
+  .status-warn   { color: var(--yellow); }
+  .status-info   { color: var(--blue); }
+
+  /* ── Architecture image ──────────────────────────────────── */
+  .arch-img { width: 100%; border-radius: var(--radius); border: 1px solid var(--border); }
+  .img-caption { text-align: center; font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; }
+
+  /* ── Checklist ───────────────────────────────────────────── */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li { padding: 0.4rem 0; display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.9rem; color: var(--muted); }
+  .checklist li::before { content: '✅'; flex-shrink: 0; }
+  .checklist li.warn::before { content: '⚠️'; }
+  .checklist li.info::before { content: 'ℹ️'; }
+
+  /* ── Score card ──────────────────────────────────────────── */
+  .score-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+  .score-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1rem; text-align: center;
+  }
+  .score-num { font-size: 2.2rem; font-weight: 800; }
+  .score-label { font-size: 0.8rem; color: var(--muted); }
+
+  /* ── Footer ──────────────────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--border); padding: 2rem; text-align: center;
+    color: var(--muted); font-size: 0.85rem;
+  }
+
+  @media print {
+    body { background: white; color: #111; }
+    .cover { background: white; }
+    .card, .toc, pre { border-color: #ccc; }
+    .cover h1 { -webkit-text-fill-color: #1a56db; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ COVER PAGE ══════════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-logo">🤖</div>
+  <h1>FORTIVEX</h1>
+  <h2>Autonomous AI Sales Voice Agent — Technical Project Report</h2>
+  <div class="cover-meta">
+    <div class="meta-pill">Prepared for <span>FORTIVEX AI Private Limited</span></div>
+    <div class="meta-pill">Date <span>November 2026</span></div>
+    <div class="meta-pill">Version <span>1.0.0</span></div>
+    <div class="meta-pill">Platform <span>Apple Silicon M4 (Local)</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TOC -->
+  <div class="toc">
+    <h3>📋 Table of Contents</h3>
+    <ol>
+      <li><a href="#overview">Project Overview</a></li>
+      <li><a href="#stack">Technology Stack</a></li>
+      <li><a href="#architecture">System Architecture</a></li>
+      <li><a href="#features">Feature Implementation</a></li>
+      <li><a href="#backend">Backend Details</a></li>
+      <li><a href="#frontend">Frontend Details</a></li>
+      <li><a href="#ai">AI &amp; NLP Pipeline</a></li>
+      <li><a href="#voice">Voice Processing</a></li>
+      <li><a href="#rag">RAG Knowledge System</a></li>
+      <li><a href="#database">Database Schema</a></li>
+      <li><a href="#testing">Testing</a></li>
+      <li><a href="#setup">Setup &amp; Running</a></li>
+      <li><a href="#deliverables">Deliverables Checklist</a></li>
+      <li><a href="#future">Future Enhancements</a></li>
+    </ol>
+  </div>
+
+  <!-- ══ 1. OVERVIEW ══════════════════════════════════════════════════════ -->
+  <div class="section" id="overview">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>Project Overview</h2>
+    </div>
+
+    <p>
+      This project delivers a <strong>complete, production-quality Autonomous AI Sales Voice Agent</strong>
+      built for FORTIVEX AI Private Limited's advanced technical evaluation. It is <em>not</em> a mockup or
+      static prototype — every component is functional, integrated, and runnable locally.
+    </p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">🎯</div>
+        <h4>Mission</h4>
+        <p>Automate the first stage of the sales funnel through natural voice/text AI interaction, lead qualification, and appointment booking.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏗️</div>
+        <h4>Architecture</h4>
+        <p>Modular microservice-style design. FastAPI backend, React frontend, Gemini AI, ChromaDB RAG, local voice processing.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔒</div>
+        <h4>Privacy-First</h4>
+        <p>Speech-to-text (whisper.cpp) and text-to-speech (Piper TTS) run entirely locally. No audio sent to external servers.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">💰</div>
+        <h4>Cost Model</h4>
+        <p>Only the Gemini API (free tier) calls external services. All other AI components run on-device on Apple Silicon MPS.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 2. TECH STACK ════════════════════════════════════════════════════ -->
+  <div class="section" id="stack">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>Technology Stack</h2>
+    </div>
+
+    <table class="tech-table">
+      <thead><tr><th>Layer</th><th>Technology</th><th>Version / Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Frontend</td><td>React + Vite</td><td>React 18, Vite 5, JavaScript (ES2022)</td></tr>
+        <tr><td>UI Framework</td><td>Tailwind CSS</td><td>v3, JIT, dark-first design</td></tr>
+        <tr><td>Frontend Icons</td><td>Lucide React</td><td>Consistent icon set</td></tr>
+        <tr><td>Frontend Charts</td><td>Recharts</td><td>Dashboard analytics, line/bar/pie</td></tr>
+        <tr><td>HTTP Client</td><td>Axios</td><td>Centralized <code>api.js</code> service layer</td></tr>
+        <tr><td>Backend</td><td>FastAPI + Python</td><td>Python 3.12, Uvicorn, async support</td></tr>
+        <tr><td>ORM</td><td>SQLAlchemy</td><td>v2 ORM style, SQLite backend</td></tr>
+        <tr><td>Validation</td><td>Pydantic v2</td><td>field_validator, model_validate()</td></tr>
+        <tr><td>AI Model</td><td>Google Gemini 1.5 Flash</td><td>google-generativeai SDK, tool calling, JSON mode</td></tr>
+        <tr><td>Vector DB</td><td>ChromaDB</td><td>v0.5.x, persistent local storage</td></tr>
+        <tr><td>Embeddings</td><td>Sentence Transformers</td><td>all-MiniLM-L6-v2, Apple Silicon MPS</td></tr>
+        <tr><td>Speech-to-Text</td><td>whisper.cpp</td><td>Base English model, Metal acceleration</td></tr>
+        <tr><td>Text-to-Speech</td><td>Piper TTS</td><td>en_US-lessac-medium, WAV output</td></tr>
+        <tr><td>Database</td><td>SQLite</td><td>7 tables, timezone-aware timestamps</td></tr>
+        <tr><td>Testing</td><td>Pytest + HTTPX</td><td>20 tests, asyncio mode, TestClient</td></tr>
+      </tbody>
+    </table>
+
+    <div class="pill-group">
+      <span class="pill pill-blue">React 18</span>
+      <span class="pill pill-blue">Vite 5</span>
+      <span class="pill pill-blue">Tailwind CSS</span>
+      <span class="pill pill-orange">FastAPI</span>
+      <span class="pill pill-orange">Pydantic v2</span>
+      <span class="pill pill-orange">SQLAlchemy</span>
+      <span class="pill pill-green">Gemini 1.5 Flash</span>
+      <span class="pill pill-cyan">ChromaDB</span>
+      <span class="pill pill-cyan">Sentence Transformers</span>
+      <span class="pill pill-yellow">whisper.cpp</span>
+      <span class="pill pill-yellow">Piper TTS</span>
+      <span class="pill pill-purple">Apple MPS</span>
+    </div>
+  </div>
+
+  <!-- ══ 3. ARCHITECTURE ══════════════════════════════════════════════════ -->
+  <div class="section" id="architecture">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>System Architecture</h2>
+    </div>
+
+    <img src="architecture.png" alt="FORTIVEX System Architecture Diagram" class="arch-img"
+         onerror="this.style.display='none'; document.getElementById('arch-fallback').style.display='block'"/>
+    <div id="arch-fallback" style="display:none; background:var(--bg3); border-radius:8px; padding:1.5rem; color:var(--muted); font-style:italic;">
+      📐 Architecture diagram: <code>docs/architecture.png</code> — open file directly to view.
+    </div>
+    <div class="img-caption">Figure 1 — FORTIVEX Full System Architecture (see docs/architecture.png)</div>
+
+    <h3>Data Flow</h3>
+    <p>
+      Customer voice input → <strong>whisper.cpp</strong> transcription → <strong>FastAPI</strong> routing →
+      <strong>RAG Engine</strong> context retrieval from ChromaDB → augmented prompt to <strong>Gemini 1.5 Flash</strong>
+      → AI response with optional <strong>tool calls</strong> (create_lead, book_appointment, etc.) →
+      database writes → response text → <strong>Piper TTS</strong> synthesis → audio returned to browser.
+    </p>
+
+    <h3>Service Separation</h3>
+    <div class="card-grid">
+      <div class="card">
+        <h4>GeminiService</h4>
+        <p>Conversation engine, tool calling, sentiment analysis, lead extraction, call summarization. Session history cached in-memory per session ID.</p>
+      </div>
+      <div class="card">
+        <h4>RAGService</h4>
+        <p>Document ingestion (PDF/TXT), chunking, sentence-transformer embedding on MPS, ChromaDB storage, semantic retrieval.</p>
+      </div>
+      <div class="card">
+        <h4>VoiceService</h4>
+        <p>whisper.cpp subprocess for STT transcription. Piper TTS subprocess for speech synthesis. Health checks for binary readiness.</p>
+      </div>
+      <div class="card">
+        <h4>AgentService</h4>
+        <p>Orchestrates all services. Routes messages, processes tool call results, persists conversation messages, computes sentiment & lead score.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 4. FEATURES ══════════════════════════════════════════════════════ -->
+  <div class="section" id="features">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>Feature Implementation</h2>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">💬</div>
+        <h4>Conversational AI</h4>
+        <p>Multi-turn context-aware chat using Gemini 1.5 Flash. Maintains per-session history. Graceful demo fallback without API key.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎙️</div>
+        <h4>Voice Input</h4>
+        <p>Browser MediaRecorder API captures audio. Upload to backend → whisper.cpp transcription → chat pipeline. Metal/MPS accelerated.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔊</div>
+        <h4>Voice Output</h4>
+        <p>Piper TTS synthesizes AI responses to WAV audio. Streamed back as audio/wav. Browser AudioContext plays response.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📚</div>
+        <h4>Knowledge RAG</h4>
+        <p>Upload PDF/TXT documents. Auto-chunked and embedded. Semantic search injects context into every Gemini prompt.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏷️</div>
+        <h4>Lead Qualification</h4>
+        <p>AI tool calling auto-creates leads. Scoring 0–100 (HOT/WARM/COLD) based on intent, budget, timeline, and sentiment.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📅</div>
+        <h4>Appointment Booking</h4>
+        <p>AI books product demos via tool calling. Slot availability checks, confirmation messages, calendar data in SQLite.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">❤️</div>
+        <h4>Sentiment Analysis</h4>
+        <p>Per-message sentiment (POSITIVE/NEUTRAL/NEGATIVE), buying intent, urgency, objections — JSON structured output from Gemini.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h4>Analytics Dashboard</h4>
+        <p>Real-time stats: total leads, conversations, appointments, conversion rate, sentiment breakdown, lead score chart.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📝</div>
+        <h4>Call Summarization</h4>
+        <p>AI-generated structured summaries: requirements, products discussed, objections, recommended next action, lead score.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 5. BACKEND ═══════════════════════════════════════════════════════ -->
+  <div class="section" id="backend">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2>Backend Details</h2>
+    </div>
+
+    <h3>API Routes</h3>
+    <table class="tech-table">
+      <thead><tr><th>Router</th><th>Prefix</th><th>Key Endpoints</th></tr></thead>
+      <tbody>
+        <tr><td>Agent</td><td>/api/agent</td><td>POST /chat, POST /chat/voice, POST /analyze, POST /summarize, DELETE /session/{id}</td></tr>
+        <tr><td>Voice</td><td>/api/voice</td><td>POST /transcribe, POST /synthesize, GET /status</td></tr>
+        <tr><td>Leads</td><td>/api/leads</td><td>GET /, POST /, GET /{id}, PUT /{id}, DELETE /{id}, GET /stats</td></tr>
+        <tr><td>Appointments</td><td>/api/appointments</td><td>GET /, POST /, GET /{id}, PUT /{id}/cancel, GET /slots</td></tr>
+        <tr><td>Knowledge</td><td>/api/knowledge</td><td>POST /upload, GET /documents, DELETE /{id}, POST /search</td></tr>
+        <tr><td>Conversations</td><td>/api/conversations</td><td>GET /, GET /{id}, GET /{id}/messages, POST /{id}/end</td></tr>
+        <tr><td>Dashboard</td><td>/api/dashboard</td><td>GET /analytics, GET /recent-activity</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Project Structure</h3>
+<pre><code>backend/
+├── app/
+│   ├── main.py          # FastAPI app, middleware, router registration
+│   ├── config.py        # Pydantic Settings, reads .env
+│   ├── database/        # SQLAlchemy engine, session factory
+│   ├── models/          # ORM models: Lead, Conversation, Message,
+│   │                    #   Appointment, CallSummary, KnowledgeDoc, Chunk
+│   ├── schemas/         # Pydantic v2 request/response schemas
+│   ├── routes/          # 7 route modules (agent, voice, leads…)
+│   ├── services/        # GeminiService, RAGService, VoiceService, AgentService
+│   └── utils/           # Helpers
+├── tests/
+│   ├── conftest.py      # Test DB setup, demo mode env vars
+│   └── test_api.py      # 20 pytest tests
+├── requirements.txt
+├── pytest.ini
+└── venv/</code></pre>
+  </div>
+
+  <!-- ══ 6. FRONTEND ══════════════════════════════════════════════════════ -->
+  <div class="section" id="frontend">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2>Frontend Details</h2>
+    </div>
+
+    <div class="card-grid">
+      <div class="card"><h4>🏠 Dashboard</h4><p>KPI cards, Recharts line/bar/pie, recent activity feed, real-time refresh.</p></div>
+      <div class="card"><h4>🤖 Agent Chat</h4><p>Live chat UI, voice recorder button, audio playback, session management, typing indicator.</p></div>
+      <div class="card"><h4>👥 Leads</h4><p>Lead table with filtering, score badges, HOT/WARM/COLD tags, detail drawer.</p></div>
+      <div class="card"><h4>📅 Appointments</h4><p>Calendar-style list, status filtering, quick booking form.</p></div>
+      <div class="card"><h4>📚 Knowledge Base</h4><p>Document upload (drag &amp; drop), status indicators, chunk count, delete.</p></div>
+      <div class="card"><h4>📞 Call History</h4><p>Paginated conversation list, message viewer, call summary panel.</p></div>
+      <div class="card"><h4>⚙️ Settings</h4><p>Company config form, agent name/industry, Gemini model selector, voice toggle.</p></div>
+    </div>
+
+    <h3>Custom Hooks</h3>
+    <ul style="list-style:none;padding:0;">
+      <li style="padding:0.3rem 0;color:var(--muted)"><code style="color:var(--cyan)">useVoiceRecorder</code> — MediaRecorder API, start/stop, blob capture, upload to /api/agent/chat/voice</li>
+      <li style="padding:0.3rem 0;color:var(--muted)"><code style="color:var(--cyan)">useAudioPlayer</code> — Fetches audio blob from /api/voice/synthesize, plays via AudioContext</li>
+    </ul>
+  </div>
+
+  <!-- ══ 7. AI & NLP PIPELINE ════════════════════════════════════════════ -->
+  <div class="section" id="ai">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <h2>AI &amp; NLP Pipeline</h2>
+    </div>
+
+    <h3>Gemini Tool Calling</h3>
+    <p>The agent is equipped with <strong>6 function tools</strong> that it calls autonomously based on context:</p>
+    <table class="tech-table">
+      <thead><tr><th>Tool</th><th>Trigger Condition</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td>create_lead</td><td>Customer name + 1+ qualifier collected</td><td>Saves lead to SQLite CRM</td></tr>
+        <tr><td>book_appointment</td><td>Customer confirms demo request</td><td>Creates appointment row</td></tr>
+        <tr><td>get_available_slots</td><td>Customer asks "when are you free?"</td><td>Returns next 5 open slots</td></tr>
+        <tr><td>search_knowledge_base</td><td>Product/pricing/feature question</td><td>Semantic RAG retrieval</td></tr>
+        <tr><td>generate_call_summary</td><td>Goodbye / "wrap up"</td><td>AI-structured summary saved</td></tr>
+        <tr><td>update_lead</td><td>New info about existing customer</td><td>Updates lead fields in DB</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Structured JSON Outputs</h3>
+    <p>Lead analysis and sentiment analysis use Gemini's <code>response_mime_type="application/json"</code> to guarantee parseable structured output — no fragile regex parsing.</p>
+
+    <h3>Demo Mode</h3>
+    <p>When <code>GEMINI_API_KEY</code> is absent, a placeholder, or <code>DEMO_MODE=true</code>, all AI calls return pre-scripted realistic demo responses. The system is fully usable for evaluation without an API key.</p>
+  </div>
+
+  <!-- ══ 8. VOICE ═════════════════════════════════════════════════════════ -->
+  <div class="section" id="voice">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <h2>Voice Processing</h2>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">🎤</div>
+        <h4>whisper.cpp — STT</h4>
+        <p>Built from source with Apple Metal acceleration. Uses <code>ggml-base.en.bin</code> model for fast English transcription. Invoked via subprocess with WAV input.</p>
+        <p style="margin-top:0.5rem"><code>bash scripts/setup_whisper.sh</code></p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔊</div>
+        <h4>Piper TTS — TTS</h4>
+        <p>Offline neural TTS using <code>en_US-lessac-medium</code> ONNX model. Natural-sounding voice output. Runs entirely on-device, no network needed.</p>
+        <p style="margin-top:0.5rem"><code>bash scripts/setup_piper.sh</code></p>
+      </div>
+    </div>
+
+    <p class="status status-warn">⚠️ whisper.cpp and Piper require one-time manual setup (compilation / binary download). The backend gracefully handles their absence and reports <code>"voice_ready": false</code> in /health until configured.</p>
+  </div>
+
+  <!-- ══ 9. RAG ═══════════════════════════════════════════════════════════ -->
+  <div class="section" id="rag">
+    <div class="section-header">
+      <div class="section-num">9</div>
+      <h2>RAG Knowledge System</h2>
+    </div>
+
+    <p>The <strong>Retrieval-Augmented Generation (RAG)</strong> pipeline enables the agent to answer product and company questions accurately from documents, not from hallucinated training data.</p>
+
+    <h3>Pipeline</h3>
+    <ol style="padding-left:1.5rem;color:var(--muted);">
+      <li style="margin:0.4rem 0">Upload PDF or TXT document via <code>POST /api/knowledge/upload</code></li>
+      <li style="margin:0.4rem 0">RAGService chunks text into ~500-token segments with 50-token overlap</li>
+      <li style="margin:0.4rem 0">Sentence Transformers (<code>all-MiniLM-L6-v2</code>) generates 384-dim embeddings on <strong>Apple MPS</strong></li>
+      <li style="margin:0.4rem 0">Embeddings + metadata stored in ChromaDB (persistent local vector store)</li>
+      <li style="margin:0.4rem 0">At chat time: query embedded → cosine similarity search → top-3 chunks retrieved</li>
+      <li style="margin:0.4rem 0">Context injected into Gemini prompt as <em>"KNOWLEDGE BASE CONTEXT"</em></li>
+    </ol>
+
+    <h3>Pre-loaded Documents</h3>
+    <ul class="checklist">
+      <li><strong>product_catalogue.txt</strong> — NovaTech product lineup, pricing tiers, features (11 chunks)</li>
+      <li><strong>sales_faq.txt</strong> — Common customer questions, policies, support, ROI claims (14 chunks)</li>
+    </ul>
+  </div>
+
+  <!-- ══ 10. DATABASE ═════════════════════════════════════════════════════ -->
+  <div class="section" id="database">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <h2>Database Schema</h2>
+    </div>
+
+    <table class="tech-table">
+      <thead><tr><th>Table</th><th>Key Columns</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>leads</td><td>id, name, email, company, lead_score, status (HOT/WARM/COLD), intent, sentiment</td><td>CRM lead records</td></tr>
+        <tr><td>conversations</td><td>id, session_id, customer_name, status, sentiment, lead_score, buying_intent</td><td>Chat session metadata</td></tr>
+        <tr><td>messages</td><td>id, conversation_id, role, content, sentiment, timestamp</td><td>Individual chat turns</td></tr>
+        <tr><td>appointments</td><td>id, customer_name, customer_email, appointment_date, appointment_time, status, purpose</td><td>Demo bookings</td></tr>
+        <tr><td>call_summaries</td><td>id, conversation_id, full_summary, requirements, products_discussed, recommended_action</td><td>AI-generated summaries</td></tr>
+        <tr><td>knowledge_documents</td><td>id, filename, file_type, status, chunk_count</td><td>Uploaded RAG documents</td></tr>
+        <tr><td>document_chunks</td><td>id, document_id, chunk_index, content, chroma_id</td><td>Text chunks in ChromaDB</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══ 11. TESTING ══════════════════════════════════════════════════════ -->
+  <div class="section" id="testing">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <h2>Testing</h2>
+    </div>
+
+    <div class="score-grid" style="margin-bottom:1.5rem">
+      <div class="score-card">
+        <div class="score-num" style="color:var(--green)">20</div>
+        <div class="score-label">Total Tests</div>
+      </div>
+      <div class="score-card">
+        <div class="score-num" style="color:var(--green)">20</div>
+        <div class="score-label">Passing</div>
+      </div>
+      <div class="score-card">
+        <div class="score-num" style="color:var(--red)">0</div>
+        <div class="score-label">Failing</div>
+      </div>
+      <div class="score-card">
+        <div class="score-num" style="color:var(--blue)">7</div>
+        <div class="score-label">API Routers Covered</div>
+      </div>
+    </div>
+
+    <table class="tech-table">
+      <thead><tr><th>#</th><th>Test</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>test_health_check</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>2</td><td>test_root_endpoint</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>3</td><td>test_chat_endpoint</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>4</td><td>test_chat_session_persistence</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>5</td><td>test_voice_status</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>6</td><td>test_get_leads</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>7</td><td>test_create_lead</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>8</td><td>test_get_lead_by_id</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>9</td><td>test_update_lead</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>10</td><td>test_get_appointments</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>11</td><td>test_create_appointment</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>12</td><td>test_cancel_appointment</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>13</td><td>test_get_conversations</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>14</td><td>test_knowledge_documents</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>15</td><td>test_knowledge_upload_txt</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>16</td><td>test_knowledge_search</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>17</td><td>test_dashboard_analytics</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>18</td><td>test_lead_stats</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>19</td><td>test_appointment_slots</td><td class="status status-done">✅ PASSED</td></tr>
+        <tr><td>20</td><td>test_analyze_conversation</td><td class="status status-done">✅ PASSED</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Run Tests</h3>
+<pre><code>cd backend
+source venv/bin/activate
+DEMO_MODE=true GEMINI_API_KEY=dummy pytest tests/test_api.py -v</code></pre>
+  </div>
+
+  <!-- ══ 12. SETUP ════════════════════════════════════════════════════════ -->
+  <div class="section" id="setup">
+    <div class="section-header">
+      <div class="section-num">12</div>
+      <h2>Setup &amp; Running</h2>
+    </div>
+
+    <h3>Quick Start (1 command)</h3>
+<pre><code>cd /path/to/fortivex-ai-sales-agent
+bash start.sh</code></pre>
+
+    <h3>Manual Setup</h3>
+<pre><code># 1. Backend
+cd backend
+python3 -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+
+# 2. Configure API key
+cp .env.example .env
+# Edit .env → set GEMINI_API_KEY=your_actual_key
+
+# 3. Seed sample data
+cd ..
+bash scripts/seed_data.sh
+
+# 4. Start backend
+cd backend
+uvicorn app.main:app --reload --port 8000
+
+# 5. Frontend (new terminal)
+cd ../frontend
+npm install
+npm run dev
+# → http://localhost:5173</code></pre>
+
+    <h3>Environment Variables</h3>
+    <table class="tech-table">
+      <thead><tr><th>Variable</th><th>Default</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>GEMINI_API_KEY</td><td><em>required</em></td><td>Get free key at aistudio.google.com</td></tr>
+        <tr><td>GEMINI_MODEL</td><td>gemini-1.5-flash</td><td>Gemini model name</td></tr>
+        <tr><td>DEMO_MODE</td><td>false</td><td>Set true for demo without real API key</td></tr>
+        <tr><td>COMPANY_NAME</td><td>NovaTech Solutions</td><td>Demo company name</td></tr>
+        <tr><td>AGENT_NAME</td><td>Aria</td><td>AI agent display name</td></tr>
+        <tr><td>COMPANY_INDUSTRY</td><td>Enterprise Software</td><td>Industry for agent persona</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══ 13. DELIVERABLES ═════════════════════════════════════════════════ -->
+  <div class="section" id="deliverables">
+    <div class="section-header">
+      <div class="section-num">13</div>
+      <h2>Deliverables Checklist</h2>
+    </div>
+
+    <ul class="checklist">
+      <li>FastAPI backend with 7 router modules and 30+ endpoints</li>
+      <li>React + Vite + Tailwind frontend with 7 pages</li>
+      <li>Google Gemini 1.5 Flash integration with tool calling</li>
+      <li>ChromaDB + Sentence Transformers RAG pipeline (Apple MPS accelerated)</li>
+      <li>whisper.cpp STT setup script (Metal accelerated)</li>
+      <li>Piper TTS setup script (local neural TTS)</li>
+      <li>SQLite database with 7 ORM models</li>
+      <li>20 pytest tests — all passing</li>
+      <li>Sample data seeded (leads, appointments, knowledge documents)</li>
+      <li>Product catalogue + FAQ pre-loaded in ChromaDB (25 chunks)</li>
+      <li>Demo mode — works without real Gemini API key</li>
+      <li>README.md with full setup instructions</li>
+      <li>docs/architecture.md — architecture documentation</li>
+      <li>docs/architecture.png — visual architecture diagram</li>
+      <li>docs/project_report.html — this report</li>
+      <li>scripts/setup_whisper.sh — whisper.cpp build script</li>
+      <li>scripts/setup_piper.sh — Piper TTS setup script</li>
+      <li>scripts/seed_data.sh — sample data seeder</li>
+      <li>start.sh — one-command startup</li>
+      <li>Makefile — developer convenience targets</li>
+      <li>.gitignore — production-ready</li>
+      <li>.env.example — documented environment template</li>
+      <li class="warn">whisper.cpp binary (requires user to run setup_whisper.sh — needs Xcode + network)</li>
+      <li class="warn">Piper TTS binary (requires user to run setup_piper.sh — needs network for ONNX model)</li>
+      <li class="info">Real Gemini API key required for live AI responses (demo mode works without it)</li>
+    </ul>
+  </div>
+
+  <!-- ══ 14. FUTURE ═══════════════════════════════════════════════════════ -->
+  <div class="section" id="future">
+    <div class="section-header">
+      <div class="section-num">14</div>
+      <h2>Future Enhancements</h2>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">📞</div>
+        <h4>WebRTC Real-time Voice</h4>
+        <p>Replace file-upload STT with real-time WebRTC streaming to whisper.cpp for sub-second latency voice conversation.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔗</div>
+        <h4>CRM Integration</h4>
+        <p>Push leads to Salesforce, HubSpot, or Zoho CRM via webhooks when new leads are qualified.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📧</div>
+        <h4>Email Follow-ups</h4>
+        <p>Auto-generate and send personalized follow-up emails after each call using the call summary.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌐</div>
+        <h4>Multi-language</h4>
+        <p>Extend whisper.cpp to multilingual model for non-English voice input support.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📱</div>
+        <h4>Mobile App</h4>
+        <p>React Native app for sales reps to review leads and summaries on the go.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔐</div>
+        <h4>Auth &amp; Multi-tenant</h4>
+        <p>JWT authentication, role-based access, multiple company configurations in one deployment.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  <p>FORTIVEX Autonomous AI Sales Voice Agent &nbsp;|&nbsp; Technical Project Report &nbsp;|&nbsp; November 2026</p>
+  <p style="margin-top:0.3rem;">Built with ❤️ using Google Gemini, FastAPI, React, ChromaDB, whisper.cpp, Piper TTS</p>
+  <p style="margin-top:0.5rem;font-size:0.75rem;">
+    <em>Disclaimer: This is a demonstration application using a fictitious company "NovaTech Solutions".
+    It is not affiliated with or representative of FORTIVEX AI Private Limited's actual products or services.</em>
+  </p>
+</footer>
+
+</body>
+</html>

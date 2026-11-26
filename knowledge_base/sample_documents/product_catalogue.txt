@@ -1,0 +1,86 @@
+NovaTech Solutions - Product Catalogue & Company Overview
+Version 2.1 | 2026 Edition
+===========================================================
+
+ABOUT NOVATECH SOLUTIONS
+--------------------------
+NovaTech Solutions is a leading Enterprise Software company specializing in AI-powered business automation platforms. Founded in 2018, we have served over 500 enterprise clients across 30 countries.
+
+Our mission: Empower businesses with intelligent automation that drives measurable results.
+
+CORE PRODUCTS
+--------------
+
+1. NovaCRM Pro
+   - AI-powered Customer Relationship Management
+   - Features: Lead scoring, pipeline automation, email sequences, predictive analytics
+   - Pricing: Starting at $299/month (up to 10 users), $799/month (up to 50 users), Enterprise custom pricing
+   - Best for: Sales teams with 5-200 reps
+
+2. NovaDesk Enterprise
+   - Intelligent helpdesk and customer support platform
+   - Features: AI ticket routing, sentiment-aware responses, multilingual support, SLA tracking
+   - Pricing: $199/month (Basic), $499/month (Pro), $999/month (Enterprise)
+   - Best for: Customer support teams of all sizes
+
+3. NovaAnalytics Suite
+   - Business intelligence and real-time reporting
+   - Features: Interactive dashboards, predictive forecasting, custom KPI tracking, API integrations
+   - Pricing: $149/month (Starter), $399/month (Business), $899/month (Enterprise)
+   - Best for: Data-driven organizations
+
+4. NovaAutomate Platform
+   - End-to-end business process automation
+   - Features: Drag-and-drop workflow builder, 300+ integrations, RPA bots, approval workflows
+   - Pricing: $499/month (10 workflows), $999/month (unlimited workflows), Custom enterprise pricing
+   - Best for: Operations and IT teams
+
+5. NovaSales AI
+   - AI sales assistant and conversation intelligence
+   - Features: Call transcription, coaching, win/loss analysis, deal intelligence
+   - Pricing: $99/seat/month (minimum 5 seats)
+   - Best for: B2B sales organizations
+
+ENTERPRISE BUNDLES
+-------------------
+NovaSuite Complete: All 5 products at 30% discount (starting at $1,500/month)
+NovaSuite Sales: NovaCRM + NovaSales AI + NovaAnalytics (starting at $899/month)
+NovaSuite Support: NovaDesk + NovaAnalytics (starting at $499/month)
+
+IMPLEMENTATION & SUPPORT
+--------------------------
+- Standard Onboarding: Included with all plans (4-week guided setup)
+- Premium Implementation: $5,000 one-time (dedicated project manager + training)
+- 24/7 Enterprise Support: Included in Enterprise plans
+- Business Hours Support: Included in all plans
+- SLA: 99.9% uptime guarantee on all plans
+- Data migration: Free for plans > $500/month
+
+TECHNICAL SPECIFICATIONS
+--------------------------
+- Cloud: AWS/GCP multi-region deployment
+- Security: SOC2 Type II, ISO 27001, GDPR compliant
+- Integrations: Salesforce, HubSpot, Slack, Microsoft Teams, Zapier, REST API
+- Mobile: iOS and Android apps available
+- SSO: SAML 2.0, OAuth 2.0 support
+
+TRIAL & PURCHASE
+-----------------
+- Free Trial: 14 days on all products, no credit card required
+- Monthly billing: Cancel anytime
+- Annual billing: Additional 20% discount
+- Payment: Credit card, ACH, bank transfer (Enterprise)
+- Purchase Order: Available for Enterprise contracts
+
+CASE STUDIES
+------------
+- Global Bank Corp: Reduced customer response time by 65% using NovaDesk
+- TechStart Inc: Increased sales conversion by 40% with NovaCRM Pro
+- RetailGiant: Automated 70% of repetitive operations with NovaAutomate
+
+CONTACT SALES
+--------------
+Email: sales@novatech-solutions.com
+Phone: +1-800-NOVA-TECH
+Website: www.novatech-solutions.com
+Demo booking: Available 24/7 through our website or AI agent

@@ -1,0 +1,105 @@
+FORTIVEX AI SALES AGENT — PROJECT REPORT
+==========================================
+One-Page Technical Summary | November 2026
+==========================================
+
+PROJECT TITLE
+-------------
+FORTIVEX: Autonomous AI Sales Voice Agent
+Developed for FORTIVEX AI Private Limited Technical Interview Challenge
+
+BUSINESS PROBLEM
+----------------
+Modern B2B sales organizations waste 65% of rep time on non-selling activities: lead qualification,
+repetitive FAQ responses, demo scheduling, and post-call documentation. This translates to $150K-$500K
+annual productivity loss per 50-person sales team. Traditional chatbots lack context, voice capability,
+and actionable business intelligence.
+
+PROPOSED AI SOLUTION
+--------------------
+An end-to-end autonomous AI Sales Voice Agent that simulates an intelligent human sales executive,
+capable of:
+  • Natural voice + text conversation with customers
+  • Retrieving accurate answers from company knowledge base (RAG)
+  • Qualifying leads with transparent, explainable scoring
+  • Booking appointments autonomously via function calling
+  • Generating professional call summaries and analytics
+
+KEY FEATURES
+------------
+  1. AI Conversation Engine      — Google Gemini 1.5 Flash with contextual history
+  2. RAG Knowledge Retrieval     — ChromaDB + Sentence Transformers (all-MiniLM-L6-v2)
+  3. Voice Input                 — whisper.cpp local STT (Apple Silicon Metal acceleration)
+  4. Voice Output                — Piper TTS local synthesis (ONNX neural voices)
+  5. Lead Qualification          — Gemini structured JSON output, HOT/WARM/COLD scoring
+  6. Sentiment Analysis          — Multi-dimensional (sentiment, intent, urgency, objections)
+  7. Autonomous Tool Calling     — create_lead, book_appointment, search_knowledge_base
+  8. Appointment Management      — Conflict-prevented scheduling with SQLite persistence
+  9. Call Summarization          — AI-generated post-conversation intelligence
+  10. Analytics Dashboard        — Real-time metrics from live database data
+
+TECHNOLOGY STACK
+----------------
+  Frontend:  React 18 + Vite + Tailwind CSS + Recharts + Axios
+  Backend:   Python 3.12 + FastAPI + SQLAlchemy + Pydantic v2
+  AI:        Google Gemini 1.5 Flash (google-generativeai SDK)
+  RAG:       ChromaDB + Sentence Transformers (all local, no paid API)
+  Voice:     whisper.cpp (STT) + Piper TTS (TTS) — fully local, no paid services
+  Database:  SQLite (MVP) → PostgreSQL (production)
+
+SYSTEM ARCHITECTURE OVERVIEW
+-----------------------------
+                    Customer
+                        ↓
+              React Frontend (SPA)
+              7 pages: Dashboard, Agent, Leads, KB, Appointments, History, Settings
+                        ↓ REST API
+              FastAPI Backend (Python)
+                   ↙           ↘
+        Voice Processing    AI Agent Service
+        whisper.cpp STT  →  Gemini 1.5 Flash
+        Piper TTS        ←  + Tool Calling
+                              ↙    ↓    ↘
+                           RAG  Lead  Appointments
+                        ChromaDB Qualify  Booking
+                              ↘    ↓    ↙
+                            SQLite Database
+
+END-TO-END WORKFLOW
+-------------------
+  1. Customer speaks/types → Whisper transcribes audio locally
+  2. Text sent to FastAPI → RAG queries ChromaDB for relevant knowledge
+  3. Gemini receives: system prompt + conversation history + RAG context + user message
+  4. Gemini responds with text AND optional tool calls (create_lead, book_appointment, etc.)
+  5. Backend validates and executes tool actions (no direct DB access by AI)
+  6. Response text → Piper TTS → audio returned to browser
+  7. Database records lead, appointment, messages in real-time
+  8. Dashboard shows live analytics; summaries generated on conversation end
+
+COMMERCIAL FEASIBILITY
+----------------------
+  Target Market:  B2B sales teams (50-500 reps), SaaS companies, enterprise sales departments
+  Competitive Advantage: Local voice processing (no Twilio/ElevenLabs costs), Gemini free tier,
+                          RAG grounding prevents hallucination, transparent lead scoring
+  Revenue Model:  SaaS subscription ($299-999/month per team), usage-based pricing for AI calls
+  Cost to Operate (10K users/month): ~$320-900 (Gemini free tier + PostgreSQL + compute)
+  Time to Market:  MVP ready; production deployment 4-6 weeks with engineering team
+
+SCALABILITY & SECURITY
+----------------------
+  Current MVP:   SQLite + single process, suitable for demos and small teams
+  Production:    PostgreSQL + Redis + Kubernetes + load balancer + Pinecone (100K+ users)
+  Security:      API keys server-side only, parameterized SQL, CORS restrictions,
+                 input validation, file type/size enforcement, no PII logging
+  Compliance:    Architecture supports GDPR data residency, SOC2 readiness (audit logging layer)
+
+LIMITATIONS (TRANSPARENT)
+--------------------------
+  • Voice processing requires whisper.cpp and Piper setup (10 min, scripts provided)
+  • Gemini API requires free account (aistudio.google.com)
+  • SQLite not production-ready for concurrent users (documented migration path)
+  • whisper.cpp is batch STT, not real-time streaming (turn-based interaction)
+
+GITHUB: github.com/your-username/fortivex-ai-sales-agent
+API DOCS: http://localhost:8000/docs
+DEMO: http://localhost:5173

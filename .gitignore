@@ -1,0 +1,91 @@
+# Environment
+.env
+*.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+htmlcov/
+.coverage
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# AI Models (large binary files)
+whisper.cpp/models/*.bin
+piper/*.onnx
+piper/*.onnx.json
+chroma_db/
+
+# Uploads
+uploads/
+temp/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Logs
+*.log
+logs/
+
+# macOS
+.DS_Store
+.AppleDouble
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# API Keys
+*.pem
+*.key
+secrets/
+
+# Additional project-specific exclusions
+**/models/piper/
+*.onnx
+*.onnx.json
+*.wav
+*.db
+*.sqlite
+*.sqlite3
+**/chroma_db/
+**/uploads/
+**/temp/
+.pytest_cache/
+**/.pytest_cache/
+**/venv/
+**/node_modules/
+
+# Project-specific exclusions
+**/models/piper/
+*.onnx
+*.onnx.json
+*.wav
+*.db
+*.sqlite
+*.sqlite3
+**/chroma_db/
+**/uploads/
+**/temp/
+.pytest_cache/
+**/.pytest_cache/
+**/venv/
+**/node_modules/
